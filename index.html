@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ascentia</title>
+<style>
+/* Assets: file names = Figma layer names (a "/" in a layer name = sub-folder), all in ./assets
+   Splash: "ChatGPT Image Sep 26, 2026, 09_05_37 PM 2.png" (399:954) · "ChatGPT Image Sep 26, 2026, 08_08_24 PM 1.png" (399:953)
+   Login/bg: "ASCENTIA Logo.png" · "Ellipse 90.svg" · "Group 65.svg" · "battery.svg" · "wifi.svg" · "Toggle/Off.svg" · "Toggle/On.svg"
+   Home & rooms: "ASCENTIA Mark.png" · "Weather Card.png" · "Photo · Fitness Room.png" · "3D Residence · Isometric Cut-away.svg"
+     "3D Room · Bedroom.svg" · "3D Room · Living Room.svg" · "3D Room · Bathroom.svg" · "3D Room · Study Room.svg"
+   Icons: "Icon/<name>.svg" — home concierge user chat pin door shield sun drop leaf thermo sparkles mic snow lock bulb building
+     calendar users car steering shirt wrench waves chevronLeft chevronRight box dumbbell flag sliders blinds arrowRight minus plus
+     wifi bed clock bell check wine phone send qr file sofa laptop glass mix alert tv zap power eyeoff
+     (the gym tab icon is Figma's "iconmind:hotel-gym-outline-thin" -> saved as "Icon/iconmind-hotel-gym-outline-thin.svg", colon dropped) */
+:root{
+  --navy:#05152a; --text-muted:#b9c4d0; --text-dim:#8595a8;
+  --gold-light:#e5c982; --gold:#c9a34a; --navy-btn:#0b2d55;
+  --glass:linear-gradient(171deg,rgba(255,255,255,.15) 0%,rgba(255,255,255,.065) 32%,rgba(255,255,255,.035) 71%);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;font-family:Inter,system-ui,sans-serif;color:#fff;
+  min-height:100vh;display:flex;align-items:center;justify-content:center}
+.screen{position:relative;width:430px;height:932px;overflow:hidden;flex:none;background:var(--navy)}
+.abs{position:absolute}
+
+/* ---------- Splash ---------- */
+.bg{left:-151px;top:-16px;width:581px;height:963px;overflow:hidden;pointer-events:none}
+.bg img{position:absolute;left:-25.99%;top:0;width:165.75%;height:100%;max-width:none}
+.layer{position:absolute;inset:0;transition:opacity .8s ease}
+.logo{left:52px;width:327px;overflow:hidden;pointer-events:none;opacity:0;
+  top:334px;height:197px;transition:opacity 1s ease,top 1s cubic-bezier(.65,0,.35,1),height 1s cubic-bezier(.65,0,.35,1)}
+.logo img{position:absolute;left:0;top:0;width:100%;max-width:none;height:158.58%;transition:height 1s cubic-bezier(.65,0,.35,1)}
+.dim{inset:0;opacity:0;transition:opacity 1s ease;
+  background:linear-gradient(180deg,rgba(0,0,0,.7) 0%,rgba(0,0,0,.7) 58.173%,rgba(115,115,115,.7) 100%)}
+.bgcolor{inset:0;background:linear-gradient(180deg,#07203f 0%,#092b54 24.8%,#0c3569 49.6%,#092b54 71.2%,#07203f 92.8%)}
+.fade{opacity:0;transition:opacity .9s ease}
+.panel-wrap{transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+
+/* splash stages (data-stage on .screen): 1 bg · 2 dim+logo · 3 logo large · 4 welcome panel · 5 login */
+.screen[data-stage="2"] .dim,.screen[data-stage="3"] .dim{opacity:1}
+.screen[data-stage="2"] .logo,.screen[data-stage="3"] .logo,
+.screen[data-stage="4"] .logo,.screen[data-stage="5"] .logo{opacity:1}
+.screen[data-stage="3"] .logo{top:302px;height:261px}
+.screen[data-stage="3"] .logo img{height:119.69%}
+.screen[data-stage="4"] .logo,.screen[data-stage="5"] .logo{top:106px;height:261px}
+.screen[data-stage="4"] .logo img,.screen[data-stage="5"] .logo img{height:119.69%}
+.screen[data-stage="4"] .fade,.screen[data-stage="5"] .fade{opacity:1}
+.screen[data-stage="4"] .panel-wrap,.screen[data-stage="5"] .panel-wrap{transform:none}
+.screen[data-stage="5"] #splash{opacity:0;pointer-events:none}
+#login{background:#05152a}
+.screen:not([data-stage="4"]) .panel-wrap a{pointer-events:none}
+@media (prefers-reduced-motion:reduce){.screen *{transition-duration:.01s!important}}
+.shade-top{left:-74px;top:0;width:598px;height:407px;background:rgba(0,0,0,.5);filter:blur(50px)}
+.shade-bot{left:-74px;top:657px;width:598px;height:407px;background:rgba(0,0,0,.5);filter:blur(50px)}
+.panel{left:16px;top:610px;width:398px;height:278px;border-radius:20px;border-bottom:1px solid #fff;
+  box-shadow:0 0 42px rgba(0,0,0,.58),inset 0 30px 12px -21px rgba(255,255,255,.32);
+  background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.2))}
+.welcome{left:0;right:0;top:657px;text-align:center;font-size:24px;font-weight:600}
+.tagline{left:0;right:0;top:696px;text-align:center;font-size:14px}
+.cta{left:42px;top:733px;width:347px;height:60px;border-radius:31.5px;display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:700;color:#fff;text-decoration:none;box-shadow:0 4px 4px rgba(0,0,0,.25);
+  background:linear-gradient(99.8deg,#f3d98a 0%,#9b7028 100%)}
+.login-link{left:0;right:0;top:821px;text-align:center;font-size:24px;font-weight:700;color:#fff;
+  text-decoration:none;text-shadow:0 4px 4px rgba(0,0,0,.25)}
+
+/* ---------- Login ---------- */
+.orb{left:-105px;top:296px;width:93px;height:93px}
+.orb img{position:absolute;inset:-165.81%;width:431.6%;height:431.6%;max-width:none}
+.glow{left:-148px;top:-100px;width:696px;height:1147px}
+.glow img{position:absolute;inset:-11.34% -18.69% -10.46% -22.16%;width:140.85%;height:121.8%;max-width:none}
+.status{left:35px;top:14px;width:375px;height:22px;font-size:15.36px;font-weight:500}
+.status .t{position:absolute;left:0;top:0}
+.status .r{position:absolute;right:0;top:3px;display:flex;gap:6px;align-items:center}
+.status img{height:14px}
+.brand{left:50%;top:124px;width:150px;height:132px;transform:translateX(-50%)}
+.brand img{width:100%;height:100%;object-fit:contain}
+h1{position:absolute;left:0;right:0;top:280px;text-align:center;font-size:26px;font-weight:600;letter-spacing:-.39px}
+.sub{left:0;right:0;top:317px;text-align:center;font-size:14px;color:var(--text-muted)}
+form{position:absolute;left:40px;top:354px;width:350px;display:flex;flex-direction:column;gap:16px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-size:11px;font-weight:600;letter-spacing:.88px;color:var(--text-muted)}
+.input{position:relative;display:flex;align-items:center;gap:12px;height:54px;padding:0 16px;border-radius:16px;
+  border:1px solid rgba(255,255,255,.42);background:var(--glass);backdrop-filter:blur(11px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 14px 32px rgba(0,5,20,.38)}
+.input.active{border:1.2px solid rgba(229,201,130,.95);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 18px rgba(201,163,74,.25),0 14px 32px rgba(0,5,20,.38)}
+.input input{flex:1;min-width:0;background:none;border:0;outline:0;color:#fff;font:500 15px Inter,system-ui,sans-serif}
+.input img{width:20px;height:20px}.input button img{width:18px;height:18px}
+.input button{background:none;border:0;cursor:pointer;display:flex}
+.row{position:absolute;left:40px;top:542px;width:350px;height:30px;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:500}
+.row .toggle{width:52px;height:30px;background:none;border:0;cursor:pointer;position:relative}
+.row .toggle img{position:absolute;inset:0 0 -10% -1.92%;width:100%;height:110%;max-width:none}
+.row span{color:var(--text-muted)}.row a{color:var(--gold-light);text-decoration:none}
+.btn{display:flex;align-items:center;justify-content:center;height:56px;border-radius:18px;font:600 16px Inter,system-ui,sans-serif;
+  letter-spacing:.48px;cursor:pointer;text-decoration:none}
+.btn.primary{position:absolute;left:40px;top:594px;width:350px;color:var(--navy-btn);border:1px solid rgba(255,255,255,.9);
+  background:linear-gradient(170.9deg,#f1dda0 0%,#e5c982 25%,#c9a34a 50%,#9f7a2f 71.4%);
+  box-shadow:inset 0 -2px 4px rgba(107,78,20,.35),inset 0 1.5px 0 rgba(255,255,255,.55),0 10px 12px rgba(201,163,74,.35)}
+.btn.secondary{flex:none;width:168px;color:#fff;border:1px solid rgba(255,255,255,.42);
+  background:linear-gradient(170.9deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.07) 32%,rgba(255,255,255,.04) 71%);
+  backdrop-filter:blur(11px);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 14px 16px rgba(0,5,20,.38)}
+.or{position:absolute;left:40px;top:672px;width:350px;display:flex;align-items:center;justify-content:center;gap:12px;
+  font-size:11px;font-weight:600;letter-spacing:1.1px;color:var(--text-dim)}
+.or i{width:120px;height:1px;background:rgba(255,255,255,.15)}
+.bio{position:absolute;left:40px;top:707px;width:350px;display:flex;gap:14px;justify-content:center}
+.help{left:0;right:0;top:785px;text-align:center;font-size:12px;color:var(--text-dim);white-space:pre}
+
+/* ---------- App pages (Home, Notifications, Schedule, Concierge, Smart Home) ---------- */
+.page{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .35s;overflow:hidden;
+  background:var(--glow-url,url("assets/Group 65.svg")) -148px -100px/696px 1147px no-repeat,radial-gradient(90% 45% at 10% 20%,#0d3a72 0,transparent 70%),#05152a}
+.page.on{opacity:1;pointer-events:auto}
+.content{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none}.content::-webkit-scrollbar{display:none}
+.content-inset{padding:54px 20px 130px}
+.glass{position:relative;border:1px solid rgba(255,255,255,.42);border-radius:24px;background:var(--glass);backdrop-filter:blur(11px);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 14px 16px rgba(0,5,20,.38)}
+.gold-outline{border:1.2px solid rgba(229,201,130,.95);box-shadow:0 0 18px rgba(201,163,74,.25),0 14px 32px rgba(0,5,20,.38)}
+.frame-row{display:flex;align-items:center;gap:12px}.frame-column{display:flex;flex-direction:column;gap:12px}
+.icon-plate{width:40px;height:40px;flex:none;border-radius:13px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.16);background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.04))}
+.icon-plate.o{border-color:rgba(229,201,130,.55);background:linear-gradient(135deg,rgba(201,163,74,.3),rgba(201,163,74,.06))}.icon-plate img{width:50%}
+.text-title{font:600 15px Inter,system-ui,sans-serif;color:#fff}.text-body{font:12px Inter,system-ui,sans-serif;color:#b9c4d0}.text-caption{font:11px Inter,system-ui,sans-serif;color:#8595a8}
+.section-title{font:600 18px Inter,system-ui,sans-serif;letter-spacing:-.09px;padding:0 4px}.section-link{color:#e5c982;font:500 13px Inter,system-ui,sans-serif;cursor:pointer}
+.back-button,.round-button{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer}
+.round-button{position:absolute;width:48px;height:48px;border-radius:24px}.back-button img,.round-button img{width:20px}
+.chip{padding:8px 14px;border-radius:20px;font:500 13px Inter,system-ui,sans-serif;white-space:nowrap;cursor:pointer;color:#fff}
+.choice .chip{padding:7px 14px;font-size:12px;border-radius:16px}
+.chip.on,.chip-selected{background:linear-gradient(145deg,#e5c982,#c9a34a);color:#0b2d55;font-weight:600;border-color:transparent;box-shadow:0 0 8px rgba(201,163,74,.35)}
+.toggle-switch{width:52px;height:30px;border-radius:15px;border:0;position:relative;flex:none;cursor:pointer;background:rgba(255,255,255,.18);box-shadow:inset 0 1px 3px rgba(0,0,0,.3);transition:.2s}
+.toggle-switch::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#e8edf3;transition:.2s}
+.toggle-switch.on{background:linear-gradient(135deg,#e5c982,#c9a34a)}.toggle-switch.on::after{left:25px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px 5px 10px;border-radius:20px;font:600 10px Inter,system-ui,sans-serif;letter-spacing:.6px;color:var(--c);background:color-mix(in srgb,var(--c) 13%,transparent);border:1px solid color-mix(in srgb,var(--c) 40%,transparent);align-self:flex-start;white-space:nowrap}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c)}
+.divider{display:block;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent)}
+.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#8cc9a6}
+.icon-20{width:20px;height:20px}.icon-14{width:14px}.icon-16{width:16px}.icon-trailing{width:18px;height:18px}
+.menubar{position:absolute;left:0;right:0;bottom:0;height:96px;background:#fff;border-radius:20px;display:flex;justify-content:space-around;padding-top:14px}
+.menubar a{display:flex;flex-direction:column;align-items:center;gap:4px;font:500 11px Inter,system-ui,sans-serif;color:rgba(11,45,85,.7);cursor:pointer;position:relative;width:70px}
+.menubar img{height:24px;filter:brightness(0) opacity(.65)}.menubar .on{color:#c9a34a;font-weight:700}.menubar .on img{filter:none}
+.menubar .on::before{content:"";position:absolute;top:-14px;width:30px;height:8px;border-radius:7px;background:#ffba43}
+.ascentia-wordmark{font:600 22px Georgia,serif;letter-spacing:8px;color:#e5c982}
+.notifications-button{width:46px;height:46px;border-radius:23px;display:flex;align-items:center;justify-content:center;cursor:pointer}.notifications-button img{width:20px}
+.notifications-button i{position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:#ffba43}
+.weather-card{height:164px;border-radius:26px;overflow:hidden;color:#fff}
+.weather-card>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.8}
+.weather-card>i{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,26,51,.8),rgba(6,26,51,.3) 55%,rgba(6,26,51,.05))}
+.weather-card>*{z-index:1}.weather-sun{width:28px;height:28px;display:block}.weather-meta{position:absolute;left:211px;top:25px;display:flex;flex-direction:column;gap:8px}
+.weather-meta span{display:flex;gap:6px;align-items:center;padding:6px 10px;border-radius:12px;font:500 11px Inter,system-ui,sans-serif;border:1px solid rgba(255,255,255,.42);background:rgba(255,255,255,.1)}
+.smart-home-tile{flex:0 0 calc(50% - 5px);padding:14px;border-radius:18px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(143deg,rgba(255,255,255,.1),rgba(255,255,255,.03));display:flex;flex-direction:column;gap:8px}
+.smart-home-tile b{font:600 20px Inter,system-ui,sans-serif;letter-spacing:-.2px}.smart-home-tile span{font:500 11px Inter,system-ui,sans-serif;color:#b9c4d0}
+.button-gold-outline{height:56px;border-radius:18px;border:1.2px solid #e5c982;background:linear-gradient(171deg,rgba(201,163,74,.16),rgba(201,163,74,.04));color:#e5c982;font:600 16px Inter,system-ui,sans-serif;letter-spacing:.48px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 16px rgba(201,163,74,.3)}
+.quick-action{flex:1;border-radius:22px;padding:16px 0 14px;display:flex;flex-direction:column;align-items:center;gap:11px;font:500 12.5px Inter,system-ui,sans-serif;cursor:pointer}
+.quick-action .icon-plate{width:48px;height:48px;border-radius:15px}
+.quick-service-item{display:flex;flex-direction:column;align-items:center;gap:8px;width:68px;font:500 11px Inter,system-ui,sans-serif;color:#b9c4d0;cursor:pointer}
+.quick-service-item div{width:58px;height:58px;border-radius:29px;display:flex;align-items:center;justify-content:center}.quick-service-item img{width:22px}
+.ai-bubble{align-self:flex-start;max-width:310px;padding:12px 16px;border-radius:20px 20px 20px 6px;font:14px/21px Inter,system-ui,sans-serif;display:flex;flex-direction:column;gap:10px}
+.resident-bubble{align-self:flex-end;padding:12px 16px;border-radius:20px 20px 6px 20px;background:linear-gradient(161deg,#f1dda0,#e5c982 36%,#c9a34a);color:#0b2d55;font:500 14px Inter,system-ui,sans-serif;box-shadow:0 6px 8px rgba(201,163,74,.3)}
+.vehicle-card{display:flex;gap:12px;align-items:center;padding:12px;border-radius:16px;background:rgba(6,26,51,.35);border:1px solid rgba(229,201,130,.35)}
+.typing{align-self:flex-start;display:flex;gap:6px;padding:14px 16px;border-radius:20px}.typing i{width:7px;height:7px;border-radius:50%;background:#e5c982;opacity:.8}
+.composer{position:absolute;left:16px;right:16px;bottom:20px;height:58px;border-radius:24px;display:flex;align-items:center;gap:10px;padding:0 14px}
+.composer input{flex:1;min-width:0;background:0;border:0;outline:0;color:#fff;font:14px Inter,system-ui,sans-serif}.composer img{width:20px}
+.composer button{width:40px;height:40px;border-radius:20px;border:1px solid rgba(229,201,130,.55);background:linear-gradient(135deg,#e5c982,#c9a34a);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.stat{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.stat b{font:600 17px Inter,system-ui,sans-serif}.stat span{font:500 10px Inter,system-ui,sans-serif;color:#8595a8}
+/* smart-home 3D */
+.scene-3d{position:relative;height:548px}.content-inset-room{padding:0 40px 170px}
+.room-switcher{position:absolute;left:40px;width:350px;display:flex;gap:6px;padding:4px;border-radius:22px}
+.room-switcher a{flex:1;height:36px;border-radius:18px;display:flex;align-items:center;justify-content:center;font:500 12px Inter,system-ui,sans-serif;color:#b9c4d0;cursor:pointer}
+.room-switcher a.on{background:linear-gradient(156deg,#e5c982,#c9a34a);color:#0b2d55;font-weight:600}
+.holo-platform-glow{position:absolute;left:30px;top:335px;width:370px;height:180px;border-radius:50%;border:1px solid rgba(124,200,255,.3);box-shadow:0 0 0 16px rgba(124,200,255,.06),0 0 0 34px rgba(124,200,255,.04),inset 0 0 60px rgba(40,120,220,.4)}
+.room-3d{position:absolute;width:319px;height:313px}
+.ai-scan-line{position:absolute;left:66px;width:293px;height:1px;top:330px;background:linear-gradient(90deg,transparent,#ddf2ff,transparent);box-shadow:0 0 6px #4fb2f5;animation:sc 3.2s ease-in-out infinite alternate}
+@keyframes sc{from{transform:translateY(-70px)}to{transform:translateY(90px)}}
+.hud-bracket{--c:linear-gradient(rgba(159,214,255,.8),rgba(159,214,255,.8));position:absolute;left:56px;top:180px;width:318px;height:305px;pointer-events:none;background:var(--c) 0 0/14px 1px,var(--c) 0 0/1px 14px,var(--c) 100% 0/14px 1px,var(--c) 100% 0/1px 14px,var(--c) 0 100%/14px 1px,var(--c) 0 100%/1px 14px,var(--c) 100% 100%/14px 1px,var(--c) 100% 100%/1px 14px;background-repeat:no-repeat}
+.hud-label-live,.hud-label-devices{position:absolute;font:600 8.5px Inter,system-ui,sans-serif;letter-spacing:1.87px;white-space:nowrap}.hud-label-live{left:78px;top:182px;color:rgba(159,214,255,.85)}.hud-label-devices{right:50px;top:473px;color:rgba(229,201,130,.85)}
+.device-tag,.room-callout{position:absolute;display:flex;align-items:center;gap:7px;padding:4px 10px 4px 4px;border-radius:18px;font:600 11px Inter,system-ui,sans-serif;color:#fff;cursor:pointer}
+.device-tag u,.room-callout u{width:26px;height:26px;border-radius:13px;background:rgba(255,255,255,.96);display:flex;align-items:center;justify-content:center}
+.device-tag u img,.room-callout u img,.ac img{filter:brightness(0) opacity(.8)}.device-tag u img{width:14px}
+.room-callout{padding:5px 14px 5px 5px;border-radius:26px}.room-callout u{width:34px;height:34px;border-radius:17px}.room-callout u img{width:17px}
+.room-callout b{display:block;font:600 12.8px Inter,system-ui,sans-serif}.room-callout em{display:block;font:500 9.8px Inter,system-ui,sans-serif;color:#e5c982;font-style:normal}
+.gauge-ring{width:112px;height:112px;margin:0 4px;border-radius:50%;position:relative;background:conic-gradient(from 225deg,#e5c982 calc(var(--p)*270deg),rgba(255,255,255,.14) 0 270deg,transparent 0);-webkit-mask:radial-gradient(circle,transparent 42px,#000 43px);mask:radial-gradient(circle,transparent 42px,#000 43px)}
+.gauge{position:relative;width:120px;height:112px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px}.gauge .gauge-ring{position:absolute;left:4px;top:0}
+.gauge b{font:500 22px Inter,system-ui,sans-serif;letter-spacing:-.44px;position:relative;top:6px}.gauge span{font:600 9px Inter,system-ui,sans-serif;color:#8cc9a6;background:rgba(140,201,166,.18);padding:3px 8px;border-radius:10px;position:relative;top:6px}
+.step-button{width:40px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center;cursor:pointer}.step-button img{width:14px}
+.bars{display:flex;gap:5px;height:56px;align-items:flex-end;cursor:pointer}.bars i{width:9px;border-radius:3px;background:rgba(255,255,255,.12)}
+.bars i.f{background:linear-gradient(#e5c982,#c9a34a);box-shadow:0 0 6px rgba(201,163,74,.4)}.bars.w i.f{background:linear-gradient(#fff,#9fc6e6);box-shadow:0 0 6px rgba(143,195,238,.45)}
+.light-temp-chip{padding:4px 10px;border-radius:10px;font:500 10px Inter,system-ui,sans-serif;color:#fff;cursor:pointer}
+input[type=range]{width:100%;accent-color:#e5c982;height:24px}
+.play-button{width:36px;height:36px;border-radius:18px;border:0;background:linear-gradient(135deg,#e5c982,#c9a34a);color:#0b2d55;font-size:12px;cursor:pointer;box-shadow:0 0 5px rgba(201,163,74,.45)}
+.device-dock{position:absolute;left:0;right:0;bottom:0;height:140px;border-radius:50% 50% 0 0/46px 46px 0 0;border-top:1px solid rgba(255,255,255,.4);background:linear-gradient(rgba(255,255,255,.12),rgba(5,21,42,.92) 70%);backdrop-filter:blur(10px)}
+.device-dock button{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.device-dock button img{width:22px}.device-dock .ac{background:rgba(255,255,255,.97);box-shadow:0 0 18px rgba(255,255,255,.35)}
+.device-dock em{position:absolute;text-align:center;font:600 8px Inter,system-ui,sans-serif;letter-spacing:.96px;color:#b9c4d0;font-style:normal}.device-dock .ac+em{color:#e5c982}
+.profile-button{position:absolute;right:48px;top:76px;width:48px;height:48px;border-radius:24px;border:1.5px solid rgba(255,255,255,.5);background:linear-gradient(135deg,#d9b26a,#8a6a2a);display:flex;align-items:center;justify-content:center;font:600 15px Inter,system-ui,sans-serif}
+.arc-menu-base{position:absolute;left:-92px;top:734px;width:614px;height:420px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:radial-gradient(ellipse at 50% 0,rgba(255,255,255,.14),rgba(5,21,42,.6) 60%)}
+.arc-button{position:absolute;width:64px;height:64px;border-radius:32px;display:flex;align-items:center;justify-content:center;cursor:pointer}.arc-button img{width:22px}.arc-button.a{border-color:#e5c982;box-shadow:0 0 18px rgba(201,163,74,.35)}
+.arc-label{position:absolute;width:100px;text-align:center;font:600 10px Inter,system-ui,sans-serif;letter-spacing:2px;color:#b9c4d0;font-style:normal}
+.ai-concierge-button{position:absolute;width:68px;height:68px;border-radius:34px;border:1.5px solid rgba(255,255,255,.7);background:radial-gradient(circle,#fff4d6,#e5c982 50%,#9f7a2f);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 12px rgba(201,163,74,.7)}.ai-concierge-button img{width:26px}
+.chat-header{position:absolute;left:0;right:0;top:0;z-index:3;padding:54px 20px 14px;}
+.chat-scroll{inset:116px 0 98px 0;scroll-behavior:smooth;-webkit-mask-image:linear-gradient(transparent 0,#000 18px,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(transparent 0,#000 18px,#000 calc(100% - 18px),transparent)}
+.page#ai-concierge .composer{z-index:2}
+#ai-concierge{background:radial-gradient(90% 45% at 10% 20%,#0d3a72 0,transparent 70%),#05152a}
+#ai-concierge .orb,#ai-concierge .glow{pointer-events:none}
+</style>
+</head>
+<body>
+<main class="screen" id="app" data-stage="1" aria-label="Ascentia">
+
+  <!-- Splash 01-04 as one continuous flow -->
+  <div class="layer" id="splash">
+    <div class="abs bgcolor"></div>
+    <div class="abs bg"><img alt="" src="assets/ChatGPT Image Sep 26, 2026, 09_05_37 PM 2.png"></div>
+    <div class="abs dim"></div>
+    <div class="abs logo"><img alt="Ascentia" src="assets/ASCENTIA Logo.png" onerror="this.onerror=null;this.src='assets/ChatGPT Image Sep 26, 2026, 08_08_24 PM 1.png'"></div>
+
+    <div class="abs fade" style="inset:0">
+      <div class="abs shade-bot"></div>
+      <div class="abs shade-top"></div>
+    </div>
+    <div class="abs fade panel-wrap" style="inset:0">
+      <div class="abs panel"></div>
+      <p class="abs welcome">WELCOME</p>
+      <p class="abs tagline">Your Luxury Living Connected</p>
+      <a class="abs cta" href="#login" data-go="5">Get Started</a>
+      <a class="abs login-link" href="#login" data-go="5">Login</a>
+    </div>
+  </div>
+
+  <!-- Login -->
+  <div class="layer page" id="login">
+  <div class="abs orb"><img alt="" src="assets/Ellipse 90.svg"></div>
+  <div class="abs glow"><img alt="" src="assets/Group 65.svg"></div>
+  <div class="abs status">
+    <span class="t">9:34</span>
+    <span class="r"><img alt="" src="assets/wifi.svg"><img alt="" src="assets/battery.svg"></span>
+  </div>
+  <div class="abs brand"><img alt="Ascentia Luxury Condominium" src="assets/ASCENTIA Logo.png"></div>
+  <h1>Welcome back, Resident</h1>
+  <p class="abs sub">Sign in to access your residence</p>
+
+  <form onsubmit="return false">
+    <div class="field">
+      <label for="rid">RESIDENT ID OR EMAIL</label>
+      <div class="input active">
+        <img alt="" data-icon="user" src="assets/user.svg">
+        <input id="rid" type="text" value="nara@ascentia.co.th" autocomplete="username">
+      </div>
+    </div>
+    <div class="field">
+      <label for="pw">PASSWORD</label>
+      <div class="input">
+        <img alt="" data-icon="lock" src="assets/lock.svg">
+        <input id="pw" type="password" value="1234567890" autocomplete="current-password">
+        <button type="button" id="eye" aria-label="Show password"><img alt="" data-icon="eyeoff" src="assets/eyeoff.svg"></button>
+      </div>
+    </div>
+  </form>
+
+  <div class="row">
+    <button class="toggle" id="remember" role="switch" aria-checked="false" aria-label="Remember me"><img alt="" src="assets/Toggle/Off.svg"></button>
+    <span>Remember me</span>
+    <a href="#">Forgot password?</a>
+  </div>
+
+  <button class="btn primary">Log In</button>
+  <div class="or"><i></i>OR<i></i></div>
+  <div class="bio">
+    <a class="btn secondary" href="#">Face ID</a>
+    <a class="btn secondary" href="#">Fingerprint</a>
+  </div>
+  <p class="abs help">Need help?  Contact Concierge  ·  02 000 8888</p>
+</div>
+</main>
+
+<script>
+  const pw = document.getElementById('pw'), eye = document.getElementById('eye');
+  eye.addEventListener('click', () => {
+    const show = pw.type === 'password';
+    pw.type = show ? 'text' : 'password';
+    eye.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+  });
+  const rememberTg = document.getElementById('remember');
+  rememberTg.addEventListener('click', () => {
+    const on = rememberTg.getAttribute('aria-checked') !== 'true';
+    rememberTg.setAttribute('aria-checked', on);
+    {const im=rememberTg.firstElementChild;im.dataset.orig='';delete im.dataset.built;delete im.dataset.try;delete im.dataset.fig;CHAINS.delete(im);im.src = on ? 'assets/Toggle/On.svg' : 'assets/Toggle/Off.svg';}
+  });
+
+  // Continuous flow: 01 -> 02 -> 03 -> 04, then Get Started / Login -> Login
+  const app = document.getElementById('app');
+  let stage = 1, timer;
+  const go = n => { stage = n; app.dataset.stage = n; clearTimeout(timer); schedule(); };
+  const schedule = () => { if (stage < 4) timer = setTimeout(() => go(stage + 1), stage === 1 ? 1600 : 1800); };
+  app.addEventListener('click', e => {
+    const t = e.target.closest('[data-go]');
+    if (t) { e.preventDefault(); go(+t.dataset.go); }
+    else if (stage < 4 && !e.target.closest('#login')) go(stage + 1);   // tap to skip ahead
+  });
+  schedule();
+
+/* ===== App pages ===== */
+const $=(q,r=document)=>r.querySelector(q),Icon=(n,c='')=>{const f=({back:'chevronLeft',chevron:'chevronRight',gym:'iconmind:hotel-gym-outline-thin'})[n]||n;return `<img class="${c}" alt="" data-icon="${f}" src="assets/${f}.svg">`};
+const navigate=id=>{app.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===id));if(id==='ai-concierge'){const c=$('#ai-concierge .content');c.style.scrollBehavior='auto';c.scrollTop=c.scrollHeight;c.style.scrollBehavior=''}};
+const createPage=(id,h)=>{const d=document.createElement('div');d.className='page';d.id=id;d.innerHTML=h;app.appendChild(d)};
+const G='#8cc9a6',Y='#e5c982',B='#7cc8ff',R='#d98b80',GY='#a8afb8';
+const Badge=(t,c)=>`<span class="badge" style="--c:${c}">${t}</span>`,Toggle=on=>`<button class="toggle-switch${on?' on':''}"></button>`;
+const IconPlate=(i,o,s='')=>`<div class="icon-plate${o?' o':''}" style="${s}">${Icon(i)}</div>`;
+const Choice=(o,s)=>`<div class="choice frame-row" style="gap:6px">${o.map((x,k)=>`<span class="glass chip${k==s?' on':''}">${x}</span>`).join('')}</div>`;
+const Menubar=`<div class="menubar">${[['home','Home'],['concierge','Service'],['gym','Facility'],['chat','Community'],['user','Profile']].map(([i,l],k)=>`<a class="${k?'':'on'}" ${k==0?'data-n="home"':k==3?'data-n="ai-concierge"':''}>${Icon(i)}${l}</a>`).join('')}</div>`;
+const TopBar=(t,s,b,r='')=>`<div class="frame-row" style="height:56px;gap:14px"><a class="glass back-button" data-n="${b}">${Icon('back')}</a><div style="flex:1"><div style="font:600 24px Inter,system-ui,sans-serif;letter-spacing:-.36px">${t}</div><div class="text-body">${s}</div></div>${r}</div>`;
+const pl44='width:44px;height:44px;border-radius:14px';
+
+// --- Home ---
+const StatusCard=(i,l,v,c)=>`<div class="glass" style="flex:1;padding:13px;border-radius:20px;display:flex;flex-direction:column;gap:9px">${Icon(i,'icon-20')}<span style="font:600 10px Inter,system-ui,sans-serif;letter-spacing:.8px;color:#8595a8">${l}</span><span style="font:600 14.5px Inter,system-ui,sans-serif;display:flex;align-items:center;gap:7px"><i class="live-dot" style="background:${c}"></i>${v}</span></div>`;
+const SmartHomeTile=(i,v,l,on)=>`<div class="smart-home-tile"><div class="frame-row" style="justify-content:space-between">${Icon(i,'icon-20')}${Toggle(on)}</div><b>${v}</b><span>${l}</span></div>`;
+const UpdateCard=(i,o,t,tm,x)=>`<a class="glass frame-row" data-n="notifications" style="padding:16px;border-radius:20px;gap:14px;cursor:pointer">${IconPlate(i,o,pl44)}<div class="frame-column" style="gap:4px;flex:1"><div class="frame-row" style="gap:8px"><b class="text-title">${t}</b><span style="color:#e5c982;font:600 11px Inter,system-ui,sans-serif">${tm}</span></div><div class="text-body" style="line-height:17px">${x}</div></div>${Icon('chevron','icon-trailing')}</a>`;
+const ScheduleRow=(t,a,n,s,i,f)=>`<div class="frame-row" style="padding:12px 10px;gap:14px;${n?'cursor:pointer':''}" ${n?`data-n="${n}"`:''}><div style="width:50px;text-align:center"><div style="font:600 16px Inter,system-ui,sans-serif;color:${f?'#e5c982':'#fff'}">${t}</div><div style="font:600 10px Inter,system-ui,sans-serif;letter-spacing:.8px;color:#8595a8">${a}</div></div><i style="width:2px;height:36px;border-radius:1px;background:${f?'linear-gradient(#e5c982,#c9a34a)':'rgba(255,255,255,.18)'}"></i><div style="flex:1"><div class="text-title">${n?'Fitness Room':s[0]}</div><div class="text-body">${s[1]}</div></div>${IconPlate(i,f,'width:36px;height:36px;border-radius:12px')}</div>`;
+createPage('home',`<div class="content"><div class="content-inset" style="padding:69px 16px 130px">
+<div class="frame-row" style="justify-content:space-between;padding:0 4px;height:34px"><span class="ascentia-wordmark">ASCENTIA</span><a class="glass notifications-button gold-outline" data-n="notifications">${Icon('bell')}<i></i></a></div>
+<div style="padding:21px 4px 0"><div class="text-body" style="font-size:16px">Good Morning,</div><div style="font:600 30px Inter,system-ui,sans-serif;letter-spacing:-.6px">Naru Duangmet</div><div class="frame-row text-body" style="gap:6px;font-weight:500;margin-top:4px">${Icon('pin','icon-14')}Residence A-1203 · Tower A · Sat 26 Sep</div></div>
+<div class="frame-row" style="gap:10px;margin:20px 4px 0">${StatusCard('home','RESIDENCE','At Home',G)}${StatusCard('door','HOME STATUS','All Secure',G)}${StatusCard('shield','SECURITY','Armed',Y)}</div>
+<div class="glass weather-card" style="margin-top:20px"><img src="assets/Weather Card.png" alt=""><i></i><div style="position:absolute;left:21px;top:21px;width:28px">${Icon('sun','weather-sun')}</div><div style="position:absolute;left:17px;top:51px;font:300 56px Inter,system-ui,sans-serif;letter-spacing:-2.8px">32°<span style="font-size:22px;letter-spacing:0;color:#b9c4d0;margin-left:6px">C</span></div><b style="position:absolute;left:21px;top:125px;font:600 14px Inter,system-ui,sans-serif">Bangkok · Sunny</b><div class="weather-meta"><span>${Icon('drop','icon-14')}Humidity 62%</span><span>${Icon('leaf','icon-14')}AQI 42 · Good</span><span>${Icon('thermo','icon-14')}H 34° L 27°</span></div></div>
+<a class="glass gold-outline frame-column" data-n="ai-concierge" style="margin-top:22px;padding:16px;gap:14px;cursor:pointer"><div class="frame-row">${IconPlate('sparkles',1,'width:42px;height:42px')}<div style="flex:1"><div class="text-title" style="font-size:16px">AI Concierge</div><div class="text-body">Type or speak — we’ll take care of it.</div></div>${IconPlate('mic',0)}</div><div class="frame-row" style="gap:8px">${['Bring my car','Gym at 6 PM','Housekeeping'].map(c=>`<span class="glass chip" style="font-size:12px;padding:7px 12px">${c}</span>`).join('')}</div></a>
+<div class="frame-row" style="justify-content:space-between;margin:22px 4px 14px"><span class="section-title" style="padding:0">Residence Status</span><span class="section-link" data-n="smart-home-3d">Smart Home</span></div>
+<div class="glass frame-column" style="padding:18px;border-radius:26px"><div class="frame-row" style="flex-wrap:wrap;gap:10px">${SmartHomeTile('thermo','24°C','Temperature',0)}${SmartHomeTile('snow','Cool · 24°','Air Conditioning',0)}${SmartHomeTile('lock','Locked','Door Lock',1)}${SmartHomeTile('bulb','3 On','Lights',1)}</div><a class="btngold button-gold-outline" data-n="smart-home-3d">Open Smart Home</a></div>
+<div class="section-title" style="margin:22px 0 14px">Explore</div><div class="frame-row" style="gap:11px">${[['building','Facilities'],['calendar','Booking'],['concierge','Service'],['users','Guest']].map(([i,l])=>`<a class="glass quick-action">${IconPlate(i,1)}${l}</a>`).join('')}</div>
+<div class="frame-row" style="justify-content:space-between;margin:22px 4px 14px"><span class="section-title" style="padding:0">Quick Service</span><span class="section-link">All services</span></div><div class="frame-row" style="justify-content:space-between">${[['car','Valet'],['sparkles','Housekeeping'],['steering','Chauffeur'],['shirt','Laundry'],['wrench','Maintenance']].map(([i,l])=>`<a class="quick-service-item"><div class="glass">${Icon(i)}</div>${l}</a>`).join('')}</div>
+<div class="frame-row" style="justify-content:space-between;margin:22px 4px 14px"><span class="section-title" style="padding:0">Today's Updates</span><span class="section-link" data-n="notifications">View All</span></div><div class="frame-column" style="gap:12px">${UpdateCard('waves',1,'Pool Maintenance','10:00 – 14:00','Infinity Pool (Floor 20) is closed today for maintenance.')}${UpdateCard('box',0,'Parcel Arrived','08:12','2 parcels are waiting for you at the Concierge Desk.')}</div>
+<div class="frame-row" style="justify-content:space-between;margin:22px 4px 14px"><span class="section-title" style="padding:0">Today's Schedule</span><span class="section-link">Calendar</span></div>
+<div class="glass" style="padding:8px">${ScheduleRow('10:00','AM','schedule-detail',['','Floor 5 · 1 guest'],'dumbbell',1)}<i class="divider"></i>${ScheduleRow('02:00','PM',0,['Housekeeping','Full service · 2 hrs'],'sparkles')}<i class="divider"></i>${ScheduleRow('06:00','PM',0,['Golf Course','Sky Driving Range · 2 guests'],'flag')}</div></div></div>${Menubar}`);
+
+// --- Notifications ---
+const NotificationCard=(i,o,t,tm,x,b,n)=>`<div class="glass frame-row" ${n?`data-n="${n}"`:''} style="align-items:flex-start;gap:14px;padding:16px;border-radius:20px">${IconPlate(i,o,pl44)}<div class="frame-column" style="gap:5px;flex:1"><div class="frame-row" style="justify-content:space-between"><b class="text-title">${t}</b><span class="text-caption" style="font-weight:500">${tm}</span></div><div class="text-body" style="line-height:17px">${x}</div>${b||''}</div></div>`;
+createPage('notifications',`<div class="content"><div class="content-inset frame-column" style="gap:16px">${TopBar('Notifications',"Today's updates & alerts",'home',`<div class="glass back-button">${Icon('check')}</div>`)}
+<div class="frame-row fl" style="gap:8px">${['All','Building','Services','Bookings'].map((c,k)=>`<span class="glass chip${k?'':' on'}">${c}</span>`).join('')}</div><div class="section-title">Today</div>
+${NotificationCard('waves',1,'Pool Maintenance','08:00','Infinity Pool (Floor 20) is closed 10:00 – 14:00 for scheduled maintenance.',Badge('CLOSED · MAINTENANCE',R))}
+${NotificationCard('box',0,'Parcel Arrived','08:12','2 parcels from Central Online are waiting at the Concierge Desk, Lobby G.')}
+${NotificationCard('sparkles',0,'Housekeeping Confirmed','07:45','Full service scheduled today at 02:00 PM. Staff: Khun Malee.',Badge('CONFIRMED',G),'schedule-detail')}
+${NotificationCard('wine',1,'Wine & Dinner Night','07:30','RSVP now for Friday 2 Oct, Sky Lounge — 12 seats left.',Badge('UPCOMING',Y))}
+<div class="section-title" style="margin-top:2px">Yesterday</div>${NotificationCard('wrench',0,'Maintenance Completed','Fri','Bedroom air conditioning has been serviced. Rate your experience.',Badge('COMPLETED',GY))}</div></div>${Menubar}`);
+
+// --- Schedule detail ---
+const dr=(i,o,l,v)=>`<div class="frame-row" style="padding:11px 8px;gap:14px">${IconPlate(i,o,'width:36px;height:36px;border-radius:12px')}<div><div style="font:600 10px Inter,system-ui,sans-serif;letter-spacing:.8px;color:#8595a8">${l}</div><div style="font:500 15px Inter,system-ui,sans-serif">${v}</div></div></div>`;
+createPage('schedule-detail',`<div class="content"><div class="content-inset frame-column" style="gap:18px">${TopBar('Fitness Room','Today · Booking details','home')}
+<div class="glass" style="height:210px;border-radius:26px;overflow:hidden;border-color:rgba(255,255,255,.25)"><img src="assets/Photo · Fitness Room.png" alt="" style="width:100%;height:100%;object-fit:cover"><i style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,26,51,0),rgba(6,26,51,.24) 50%,rgba(6,26,51,.8))"></i><span style="position:absolute;left:13px;top:25px">${Badge('CONFIRMED',G)}</span><span class="text-body" style="position:absolute;left:18px;bottom:16px;font-weight:500;font-size:13px">Floor 5 · Tower A</span></div>
+<div class="glass" style="padding:10px">${[dr('calendar',0,'DATE','Saturday, 26 September'),dr('clock',1,'TIME','10:00 – 11:00 AM'),dr('pin',0,'LOCATION','Floor 5, Tower A'),dr('users',0,'GUESTS','1 Person'),dr('file',0,'BOOKING ID','ASC-FT-260910')].join('<i class="divider"></i>')}</div>
+<div class="glass gold-outline frame-row" style="padding:16px;gap:16px;border-radius:22px">${IconPlate('qr',1,'width:64px;height:64px;border-radius:16px')}<div class="frame-column" style="gap:4px"><div class="text-title">Digital Access Pass</div><div class="text-body" style="line-height:17px">Tap your phone at the gym entrance reader.</div></div></div>
+<div class="glass" style="align-self:center;width:169px;height:54px;border-radius:18px;display:flex;align-items:center;justify-content:center;font:600 16px Inter,system-ui,sans-serif;letter-spacing:.48px;cursor:pointer">Add to Calendar</div></div></div>${Menubar}`);
+
+// --- AI Concierge chat ---
+const AIBubble=h=>`<div class="glass ai-bubble">${h}</div>`,me=t=>`<div class="resident-bubble">${t}</div>`;
+createPage('ai-concierge',`<div class="abs orb"><img alt="" src="assets/Ellipse 90.svg"></div><div class="abs glow"><img alt="" src="assets/Group 65.svg"></div><div class="chat-header frame-row"><a class="glass back-button" data-n="home">${Icon('back')}</a><div class="glass gold-outline" style="width:48px;height:48px;border-radius:24px;display:flex;align-items:center;justify-content:center"><img src="assets/ASCENTIA Mark.png" alt="" style="width:30px"></div><div style="flex:1"><div style="font:600 20px Inter,system-ui,sans-serif;letter-spacing:-.2px">AI Concierge</div><div class="text-body"><i class="live-dot"></i> Online · replies instantly</div></div><div class="glass back-button">${Icon('phone')}</div></div><div class="content chat-scroll"><div class="content-inset frame-column" style="gap:16px;padding:20px 20px 24px">
+<div class="text-caption" style="text-align:center;letter-spacing:1.4px;font-weight:600;font-size:10px">TODAY · 09:41</div>
+${AIBubble('Good morning, Nara. How may I assist you today? You can type or speak your request.')}
+<div class="frame-row" style="flex-wrap:wrap;gap:8px">${['Bring my car','Book the gym at 6 PM','I need housekeeping tomorrow'].map(c=>`<span class="glass chip suggestion-chip" style="font-size:12px;padding:7px 12px">${c}</span>`).join('')}</div>
+${me('Bring my car.')}${AIBubble(`Your BMW 7 Series is parked at P2. Shall I send it to the Main Lobby?<div class="vehicle-card">${IconPlate('car',1)}<div><div class="text-title" style="font-size:14px">BMW 7 Series</div><div class="text-body">Parking P2 · Bay B24</div><div class="text-body" style="color:#e5c982;font-weight:500">Drop-off: Main Lobby</div></div></div><div class="frame-row" style="gap:8px"><span class="chip chip-selected suggestion-chip" style="font-size:12px">Confirm Valet Request</span><span class="glass chip" style="font-size:12px">Change</span></div>`)}
+${me('Confirm Valet Request.')}${AIBubble('Your valet request has been submitted. Your BMW will arrive at the Main Lobby in about 6 minutes.'+Badge('SUBMITTED',Y))}<div id="typing-indicator" class="glass typing"><i></i><i></i><i></i></div></div></div>
+<div class="glass composer">${Icon('plus')}<input id="composer-input" placeholder="Message your concierge…">${Icon('mic')}<button id="composer-send">${Icon('send')}</button></div>`);
+
+// --- Smart Home overview ---
+const RoomCallout=(i,t,s,x,y,n)=>`<a class="glass room-callout" style="left:${x}px;top:${y}px" data-n="${n}"><u>${Icon(i)}</u><span><b>${t}</b><em>${s}</em></span></a>`;
+createPage('smart-home-3d',`<a class="glass round-button" style="left:42px;top:76px" data-n="home">${Icon('back')}</a><img src="assets/ASCENTIA Mark.png" alt="" style="position:absolute;left:195px;top:80px;width:40px"><div class="profile-button">ND</div>
+<div class="frame-row" style="position:absolute;left:42px;top:144px;width:346px;justify-content:space-between">${[['home','24°C','Indoor'],['sun','32°C','Sunny'],['drop','58%','Humidity']].map(([i,v,l])=>`<div class="frame-row" style="gap:8px"><div class="glass back-button" style="width:36px;height:36px;border-radius:18px">${Icon(i,'icon-16')}</div><div><div style="font:300 18px Inter,system-ui,sans-serif">${v}</div><div style="font:10px Inter,system-ui,sans-serif;color:#b9c4d0">${l}</div></div></div>`).join('')}</div>
+<div style="position:absolute;left:0;right:0;top:214px;text-align:center"><div style="font:500 24px Inter,system-ui,sans-serif;letter-spacing:-.24px">My Residence</div><div class="text-body" style="margin-top:6px">A-1203 · Tower A · 4 rooms · 12 devices</div></div>
+<div class="holo-platform-glow" style="top:441px;left:1px;width:428px;height:214px"></div><img class="room-3d" data-holo="residence" src="assets/3D Residence · Isometric Cut-away.svg" alt="" style="left:5px;top:296px;width:420px;height:331px"><i class="ai-scan-line" style="left:22px;width:386px;top:440px"></i><i class="hud-bracket" style="left:9px;top:300px;width:412px;height:318px"></i>
+<span class="hud-label-live" style="left:38px;top:301px">● AI DIGITAL TWIN · LIVE</span><span class="hud-label-devices" style="top:611px;right:30px">12 DEVICES · 4 ROOMS</span>
+${RoomCallout('bed','Bedroom','24°C · 3 on',34,326,'bedroom')}${RoomCallout('sofa','Living Room','23°C · 4 on',258,362,'living-room')}${RoomCallout('laptop','Study Room','24°C · 2 on',32,496,'study-room')}${RoomCallout('drop','Bathroom','25°C · 2 on',258,544,'bathroom')}
+<div class="arc-menu-base"></div>${[['mix','OVERVIEW',79,792,1,'smart-home-3d'],['sliders','ACTIONS',196,760,0,'home'],['alert','ALERTS',313,792,0,'notifications']].map(([i,l,x,y,a,n])=>`<a class="glass arc-button${a?' a':''}" style="left:${x}px;top:${y}px" data-n="${n}">${Icon(i)}</a><em class="arc-label" style="left:${x-18}px;top:${y-24}px;${a?'color:#e5c982':''}">${l}</em>`).join('')}
+<a class="ai-concierge-button" style="left:181px;top:838px" data-n="ai-concierge">${Icon('sparkles')}</a>`);
+
+// --- Rooms ---
+const RM=[['bedroom','Bedroom','Bedroom'],['living-room','Living Room','Living'],['bathroom','Bathroom','Bathroom'],['study-room','Study Room','Study']];
+const row=p=>`<i class="divider"></i><div class="frame-row">${Icon(p[1],'icon-trailing')}<div style="flex:1"><div style="font:500 13px Inter,system-ui,sans-serif">${p[2]}</div><div class="text-caption">${p[3]}</div></div>${Toggle(p[4])}</div>`;
+const part=p=>p[0]=='row'?row(p):p[0]=='r'?`<div style="display:flex;align-items:flex-end;gap:10px"><span style="font:300 34px Inter,system-ui,sans-serif">${p[1]}</span><span style="font:500 12px Inter,system-ui,sans-serif;color:#e5c982;padding-bottom:6px">${p[2]}</span></div>`:p[0]=='s'?`<div class="frame-row" style="gap:8px">${p[1].map(s=>`<div class="stat"><b style="color:${s[2]?G:'#fff'}">${s[0]}</b><span>${s[1]}</span></div>`).join('')}</div>`:`<div class="frame-row" style="justify-content:space-between"><span class="text-body" style="font-weight:500">${p[1]}</span>${Choice(p[2],p[3])}</div>`;
+const FeatureCard=c=>`<div class="glass frame-column" style="padding:16px;gap:14px"><div class="frame-row">${IconPlate(c.i,c.g)}<div style="flex:1;min-width:0"><div class="text-title" style="font-size:14px">${c.t}</div><div class="text-body">${c.s}</div></div>${c.st?Badge(c.st[0],c.st[1]):''}${c.tg?Toggle(1):''}</div>${c.p.map(part).join('')}</div>`;
+const D={
+bedroom:{dy:0,img:[55.5,176],tg:[['bulb','40%',123,281],['blinds','Closed 10%',291,261],['snow','24°C',69.5,232],['wifi','Playing',160,422]],ac:['24°C','Comfort','Cool · Sleep mode',.62],lt:['40%','Warm · 2700K',4,0],sc:['Sleep','Wake Up','Reading'],cu:['Smart Curtain','Closed · 10%',1,10],sp:['Rain Sounds','Sleep Mix',1,25],fh:['Bedroom Features','Sleep, wake & air quality'],
+ ft:[{i:'bed',g:1,t:'Sleep & Wake',s:'AI learns your sleep rhythm',st:['7h 40m',Y],p:[['row','clock','Sunrise Alarm · 06:30','Mon–Fri · light fades in 15 min',1],['row','shield','Sleep Mode','Do not disturb 22:30 – 06:30',1],['row','bulb','Bedside Lamp','Warm 20%',0],['row','bell','Night Path Light','Motion sensor · floor LED',1]]},
+ {i:'leaf',t:'Air Quality',s:'Air purifier · Bedroom',st:['Good',G],tg:1,p:[['s',[['12','PM2.5 µg/m³',1],['52%','Humidity'],['410','CO₂ ppm']]],['c','Purifier mode',['Auto','Sleep','Turbo'],1]]}]},
+'living-room':{dy:0,img:[52.5,176],tg:[['bulb','70%',136,272],['blinds','Open 100%',108,260],['snow','23°C',187,245],['wifi','Playing',212,390]],ac:['24°C','Comfort','Cool · Sleep mode',.62],lt:['40%','Warm · 2700K',4,0],sc:['Movie','Party','Relax'],cu:['Smart Curtain','Open · 100%',0,100],sp:['Bangkok Nights','Jazz Lounge',1,50],fh:['Living Room Features','Entertainment, air & cleaning'],
+ ft:[{i:'tv',g:1,t:'Smart TV 65"',s:'OLED · Living Room',tg:1,p:[['c','Source',['Netflix','HDMI 1','Apple TV'],0],['row','mic','Voice Control','"Hey Ascentia, pause movie"',1],['row','sun','Ambient Backlight','Sync colour with screen',1]]},
+ {i:'leaf',t:'Air Purifier',s:'HEPA 13 · Living Room',st:['AQI 18',G],tg:1,p:[['s',[['18','AQI',1],['55%','Humidity'],['26°C','Outdoor']]],['c','Mode',['Auto','Quiet','Turbo'],0]]},
+ {i:'sparkles',t:'Robot Vacuum',s:'Last cleaned today 09:12',st:['Docked · 100%',B],p:[['row','clock','Daily Schedule · 10:00','While you are away',1],['c','Clean mode',['Vacuum','Mop'],0]]}]},
+bathroom:{dy:7,img:[55.5,183],tg:[['bulb','100%',147,268],['blinds','Blind closed',288,263],['snow','25°C',157,233],['wifi','Playing',223,396]],ac:['25°C','Comfort','Fan · Dry',.7],lt:['100%','Daylight · 5000K',10,1],sc:['Spa','Morning','Night'],cu:['Smart Blind','Closed · 10%',1,10],sp:['Morning Brief','News · Weather',0,50],fh:['Bathroom Features','Water, ventilation & safety'],
+ ft:[{i:'thermo',g:1,t:'Water Heater',s:'Shower & bathtub',tg:1,p:[['r','42°C','READY IN 2 MIN'],['c','Temperature',['38°C','42°C','45°C'],1]]},
+ {i:'waves',t:'Bathtub',s:'Auto fill · 180 L',st:['Empty',B],p:[['c','Fill control',['Fill','Stop'],1],['row','drop','Aroma Diffuser','Eucalyptus · Spa scene',0]]},
+ {i:'wifi',t:'Ventilation & Comfort',s:'Humidity 68%',p:[['row','snow','Exhaust Fan','Auto-off after 20 min',1],['row','glass','Mirror Defog','Heated mirror',1],['row','sun','Floor Heating','28°C',0]]},
+ {i:'shield',t:'Leak Sensor',s:'Under sink · bathtub · toilet',st:['Dry · All clear',G],p:[['row','bell','Leak Alerts','Auto shut-off water valve',1]]}]},
+'study-room':{dy:14,img:[50.5,190],tg:[['bulb','100%',148,275],['blinds','Half open',293,270],['snow','24°C',75,240],['wifi','Playing',256,378]],ac:['24°C','Comfort','Eco · Auto',.62],lt:['100%','Daylight · 5000K',10,1],sc:['Focus','Meeting','Break'],cu:['Smart Curtain','Half open · 50%',-1,50],sp:['Lo-fi Focus','Deep Work Mix',1,25],fh:['Study Room Features','Focus, power & air'],
+ ft:[{i:'clock',g:1,t:'Focus Mode',s:'Pomodoro · AI blocks distractions',tg:1,p:[['r','25:00','SESSION 2 OF 4'],['c','Session',['25 min','50 min','90 min'],0],['row','shield','Do Not Disturb','Mute doorbell & notifications',1]]},
+ {i:'zap',t:'Smart Plugs',s:'3 outlets · 142 W now',st:['142 W',Y],p:[['row','laptop','Monitor & PC','96 W',1],['row','bulb','Desk Lamp','12 W · Focus white',1],['row','power','Charger Dock','Off · auto at 80%',0]]},
+ {i:'leaf',t:'Air & CO₂',s:'Fresh-air ventilation',st:['Good',G],tg:1,p:[['s',[['620','CO₂ ppm',1],['48%','Humidity'],['24°C','Room']]]]}]}};
+const room=(id,name)=>{const d=D[id],y=d.dy,[av,as,am,ap]=d.ac,[lv,ls,lb,lw]=d.lt,[cn,cs,cl,cp]=d.cu,[sn,sd,sp,sv]=d.sp;
+ createPage(id,`<div class="content"><div class="scene-3d"><a class="glass round-button" style="left:40px;top:${54+y}px" data-n="smart-home-3d">${Icon('back')}</a>
+<div style="position:absolute;left:0;right:0;top:${56+y}px;text-align:center;pointer-events:none"><div class="text-body">Overview</div><div style="font:500 22px Inter,system-ui,sans-serif;letter-spacing:-.22px">${name}</div></div><a class="glass round-button" style="right:40px;top:${54+y}px" data-n="smart-home-3d">${Icon('sliders')}</a>
+<div class="glass room-switcher" style="top:${118+y}px">${RM.map(([k,,s])=>`<a class="${k==id?'on':''}" data-n="${k}">${s}</a>`).join('')}</div>
+<div class="holo-platform-glow"></div><img class="room-3d" data-holo="${id}" alt="" src="assets/${({'bedroom':'3D Room · Bedroom','living-room':'3D Room · Living Room','bathroom':'3D Room · Bathroom','study-room':'3D Room · Study Room'})[id]}.svg" style="left:${d.img[0]}px;top:${d.img[1]}px"><i class="ai-scan-line"></i><i class="hud-bracket"></i><span class="hud-label-live">● AI DIGITAL TWIN · LIVE</span><span class="hud-label-devices">4 DEVICES · SYNCED</span>
+${d.tg.map(t=>`<button class="glass device-tag" style="left:${t[2]}px;top:${t[3]}px"><u>${Icon(t[0])}</u>${t[1]}</button>`).join('')}</div>
+<div class="content-inset-room frame-column"><div class="frame-row" style="align-items:flex-start;gap:10px"><div class="glass frame-column" style="width:170px;height:224px;padding:14px;gap:6px;align-items:center"><div class="frame-row" style="justify-content:space-between;width:142px"><span style="font:500 12px Inter,system-ui,sans-serif">Air Conditioner</span>${Icon('chevron','icon-14')}</div><div class="gauge"><div class="gauge-ring" style="--p:${ap}"></div><b>${av}</b><span>${as}</span></div><span class="text-body" style="font-size:11px">${am}</span><div class="frame-row" style="gap:10px"><span class="glass step-button">${Icon('minus')}</span><span class="glass step-button">${Icon('plus')}</span></div></div>
+<div class="glass frame-column" style="width:170px;padding:14px;gap:8px"><div class="frame-row" style="justify-content:space-between"><span style="font:500 12px Inter,system-ui,sans-serif">Smart Light</span>${Toggle(1)}</div><div style="font:300 34px Inter,system-ui,sans-serif;letter-spacing:-1px">${lv}</div><span class="text-body" style="font-size:11px">${ls}</span><div class="bars${lw?' w':''}">${[10,14.4,18.8,23.2,27.6,32,36.4,40.8,45.2,49.6].map((h,k)=>`<i class="${k<lb?'f':''}" style="height:${h}px"></i>`).join('')}</div><div class="frame-row choice" style="gap:6px"><span class="light-temp-chip ${lw?'glass':'chip-selected'}">Warm</span><span class="light-temp-chip ${lw?'chip-selected':'glass'}">White</span></div></div></div>
+<div class="frame-column" style="gap:10px"><div class="frame-row" style="gap:8px">${Icon('sparkles','icon-16')}<b class="text-title" style="font-size:16px">AI Scenes</b></div>${Choice(d.sc,0)}</div>
+<div class="glass frame-column" style="padding:16px"><div class="frame-row">${IconPlate('blinds',0,'width:40px;height:40px;border-radius:14px')}<div style="flex:1"><div class="text-title" style="font-size:14px">${cn}</div><div class="text-body">${cs}</div></div><div class="choice">${Choice(['Open','Close'],cl)}</div></div><input type="range" value="${cp}"></div>
+<div class="glass frame-column" style="padding:16px"><div class="frame-row"><div class="icon-plate" style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#2c4a6e,#c9a34a 43%,#e5c982)">${Icon('wifi')}</div><div style="flex:1"><div style="font:600 9px Inter,system-ui,sans-serif;letter-spacing:.9px;color:#e5c982">SMART SPEAKER · ${sp?'NOW PLAYING':'PAUSED'}</div><div class="text-title">${sn}</div><div class="text-body" style="font-size:11px">${sd}</div></div>${Icon('chevron','icon-trailing')}<button class="play-button">${sp?'❚❚':'▶'}</button>${Icon('chevron','icon-trailing')}</div><div class="frame-row" style="gap:10px">${Icon('minus','icon-14')}<input type="range" value="${sv}">${Icon('plus','icon-14')}</div></div>
+<div><div style="font:600 18px Inter,system-ui,sans-serif">${d.fh[0]}</div><div class="text-body">${d.fh[1]}</div></div>${d.ft.map(FeatureCard).join('')}</div></div>
+<div class="device-dock">${[['bulb','LIGHT',45,57,54],['blinds','CURTAIN',123,35,54],['snow','AC',209,31,62],['wifi','SPEAKER',291,57,54]].map(([i,l,x,yy,z])=>`<button class="${l=='AC'?'ac':''}" style="left:${x}px;top:${yy}px;width:${z}px;height:${z}px">${Icon(i)}</button><em style="left:${x}px;top:${yy+z+4}px;width:${z}px">${l}</em>`).join('')}</div>`)};
+RM.forEach(([k,n])=>room(k,n));
+
+// --- wiring ---
+app.addEventListener('click',e=>{const t=e.target;let x;
+ if(x=t.closest('[data-n]')){navigate(x.dataset.n);return}
+ if(x=t.closest('.toggle-switch')){x.classList.toggle('on');return}
+ if(x=t.closest('.choice .chip,.fl .chip')){[...x.parentNode.children].forEach(c=>c.classList.toggle('on',c==x));return}
+ if(x=t.closest('.play-button')){const p=x.textContent=='❚❚';x.textContent=p?'▶':'❚❚';return}
+ if(x=t.closest('.suggestion-chip')){send(x.textContent);return}
+ if(t.closest('#composer-send'))send($('#composer-input').value)});
+$('#composer-input').addEventListener('keydown',e=>{if(e.key=='Enter')send(e.target.value)});
+function send(v){v=v.trim();if(!v)return;const m=document.createElement('div');m.className='resident-bubble';m.textContent=v;$('#typing-indicator').before(m);$('#composer-input').value='';const s=$('#ai-concierge .content');s.scrollTop=s.scrollHeight}
+$('.btn.primary').addEventListener('click',()=>navigate('home'));
+new MutationObserver(()=>{if(app.dataset.stage=='5'&&!app.querySelector('.page.on'))navigate('login')}).observe(app,{attributes:true,attributeFilter:['data-stage']});
+
+// Hologram rooms drawn in code (isometric cut-away in the Figma palette). Used when the exported "3D Room · …" / "3D Residence · …" SVGs can't load.
+const HOLO={
+bedroom:[[1.4,1.8,3.2,2.6,8],[1.4,1.8,.5,2.6,22],[4.9,1.8,.8,.8,10],[5.1,2,.4,.4,6,1,10],[4.9,3.6,.8,.8,10],[5.1,3.8,.4,.4,6,1,10],[.2,4.4,1.1,1.5,50]],
+'living-room':[[1.5,3.8,3,1.4,12],[1.5,5.1,3,.3,26],[1.8,.2,2.8,.7,11],[2.1,.3,2.2,.15,24,1,11],[2.4,2.4,1.6,1,6],[5,.4,.6,.6,18],[.2,2,.6,2.2,40]],
+bathroom:[[.3,.3,1.6,3.8,12],[.5,.5,1.2,3.4,2,1,12],[3.6,.3,2,1,16],[3.8,.2,1.6,.08,26,1,26],[4.7,3.9,.9,1.2,11],[5.5,3.9,.3,1.2,20]],
+'study-room':[[1.8,.3,3.4,1.3,14],[3,.5,1.2,.15,12,1,14],[1.9,.5,.4,.4,6,1,14],[3.2,2.2,1,1,10],[.2,2.4,.9,3.2,55],[5,4.9,.7,.7,16]],
+residence:[[3,0,.14,6,22],[0,3,6,.14,22],[.6,.6,1.6,1.8,6],[3.6,.6,1.6,1,8],[.6,3.6,1.6,.8,8],[3.8,3.8,1.2,1.8,8],[.8,.8,.4,.4,5,1,6],[4.2,.9,.5,.5,5,1,8]]};
+const holoRoom=k=>{const T=6,U=25.1,V=14.5,W=120,P=(x,y,z=0)=>[180+(x-y)*U,135+(x+y)*V-z],
+ pt=a=>a.map(q=>P(...q).map(n=>n.toFixed(1)).join(',')).join(' '),
+ poly=(a,f,o=1,c='#A9DBFF',co=.55)=>`<polygon points="${pt(a)}" fill="${f}" fill-opacity="${o}" stroke="${c}" stroke-opacity="${co}" stroke-width=".6" stroke-linejoin="round"/>`,
+ line=(a,b,o=.22,c='#7CC8FF')=>`<path d="M${P(...a).join(' ')}L${P(...b).join(' ')}" stroke="${c}" stroke-opacity="${o}" stroke-width=".6"/>`,
+ box=([x,y,w,d,h,g,z=0])=>{const c=g?['#F3DC9C','#C5AD70','#A08D5B']:['#466283','#213C5D','#182A43'],X=x+w,Y=y+d,H=z+h;
+  return poly([[x,Y,z],[X,Y,z],[X,Y,H],[x,Y,H]],c[1])+poly([[X,y,z],[X,Y,z],[X,Y,H],[X,y,H]],c[2])+poly([[x,y,H],[X,y,H],[X,Y,H],[x,Y,H]],c[0])};
+ let o=`<ellipse cx="180" cy="262" rx="170" ry="84" fill="#4FB2F5" fill-opacity=".10"/>`;
+ o+=poly([[0,0,0],[0,T,0],[0,T,W],[0,0,W]],'#15273F',.55)+poly([[0,0,0],[T,0,0],[T,0,W],[0,0,W]],'#15273F',.55);
+ for(let i=1;i<T;i++)o+=line([0,i,0],[0,i,W])+line([i,0,0],[i,0,W]);
+ for(let z=30;z<W;z+=30)o+=line([0,0,z],[0,T,z],.18)+line([0,0,z],[T,0,z],.18);
+ o+=poly([[0,T,0],[T,T,0],[T,T,-9],[0,T,-9]],'#213C5D')+poly([[T,0,0],[T,T,0],[T,T,-9],[T,0,-9]],'#182A43')+poly([[0,0,0],[T,0,0],[T,T,0],[0,T,0]],'#1A2D46');
+ for(let i=0;i<=T;i++)o+=line([i,0,0],[i,T,0])+line([0,i,0],[T,i,0]);
+ o+=[...HOLO[k]].sort((a,b)=>(a[0]+a[2]/2+a[1]+a[3]/2)-(b[0]+b[2]/2+b[1]+b[3]/2)).map(box).join('');
+ return 'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="360" height="369" viewBox="0 0 360 369" fill="none">${o}</svg>`)};
+// Icon lookup fallback: icons live at assets/<name>.svg; if missing, try other common Figma export layouts
+const ICON_ALIASES={drop:['humidity','droplet','water','drops']};
+const BUILTIN_ICONS={drop:'data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e5c982" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8s6.2 6.6 6.2 11.2a6.2 6.2 0 0 1-12.4 0C5.8 9.4 12 2.8 12 2.8z"/><path d="M9.2 14.4a2.9 2.9 0 0 0 2.4 2.5"/></svg>')};
+// Asset lookup: files may sit in assets/, assets/Home/, assets/Onboarding/ (optionally in an Icon/ subfolder). Try each place.
+const ASSET_DIRS=['','Home/','Onboarding/','Home/AI concierge/','Home/Home/','Home/Notification/','Onboarding/Login/','Onboarding/Splash 01/','Onboarding/Splash 02/','Onboarding/Splash 03/','Onboarding/Splash 04/'];
+const CHAINS=new WeakMap();   // each image keeps the same search list from its first miss to its last
+const ASSET_HITS=[];   // folders where files were already found: searched first next time, so later lookups are quick
+const assetCandidates=(raw,icon)=>{const rel=raw.replace(/^assets\//,''),base=rel.split('/').pop(),alt=base.replace(/:/g,'-'),ext=base.slice(base.lastIndexOf('.')),
+  dirs=[...new Set([...ASSET_HITS,...ASSET_DIRS])],dd=icon?dirs.flatMap(d=>[d,d+'Icon/']):dirs,   // icons may also sit in an Icon/ subfolder
+  names=[...new Set([rel,base,alt,...(icon?(ICON_ALIASES[icon]||[]).map(a=>a+ext):[])])];
+  return [...new Set(names.flatMap(n=>dd.map(d=>`assets/${d}${n}`)))].filter(p=>p!==raw)};
+document.addEventListener('load',e=>{const i=e.target;if(i.tagName!=='IMG'||!i.dataset.try)return;const m=decodeURIComponent(i.getAttribute('src')||'').match(/^assets\/(.*\/)[^\/]+$/);if(m&&!ASSET_HITS.includes(m[1]))ASSET_HITS.unshift(m[1])},true);
+document.addEventListener('error',e=>{const i=e.target;if(i.tagName!=='IMG')return;
+  const raw=i.dataset.orig||decodeURIComponent(i.getAttribute('src')||'');
+  if(i.dataset.holo&&!raw.startsWith('assets/'))return;
+  if(!raw.startsWith('assets/')){return}
+  i.dataset.orig=raw;if(!CHAINS.has(i))CHAINS.set(i,assetCandidates(raw,i.dataset.icon));const c=CHAINS.get(i),k=+(i.dataset.try||0);
+  if(k<c.length){i.dataset.try=k+1;i.src=c[k];return}
+  if(i.dataset.holo&&!i.dataset.built&&HOLO[i.dataset.holo]){i.dataset.built=1;i.src=holoRoom(i.dataset.holo)}
+  else if(BUILTIN_ICONS[i.dataset.icon]&&!i.dataset.built){i.dataset.built=1;i.src=BUILTIN_ICONS[i.dataset.icon]}
+  else if(/Toggle\/(On|Off)\.svg$/.test(raw)&&!i.dataset.built){i.dataset.built=1;const on=/On\.svg$/.test(raw);   // login toggle drawn in code if no file is found
+    i.src='data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="52" height="30" viewBox="0 0 52 30"><rect width="52" height="30" rx="15" fill="${on?'#d4b062':'#ffffff'}" fill-opacity="${on?1:.18}"/><circle cx="${on?37:15}" cy="15" r="12" fill="#fff"/></svg>`)}},true);
+// CSS background (page glow) can't fall back on its own, so locate the file and expose it as a variable
+(()=>{const n='Group 65.svg',c=ASSET_DIRS.map(d=>`assets/${d}${n}`);let k=0;
+  const t=()=>{if(k>=c.length)return;const im=new Image();im.onload=()=>document.documentElement.style.setProperty('--glow-url',`url("${c[k]}")`);im.onerror=()=>{k++;t()};im.src=c[k]};t()})();
+// images that failed before this handler existed
+document.querySelectorAll('img').forEach(i=>{if(i.complete&&!i.naturalWidth)i.dispatchEvent(new Event('error'))});
+</script>
+</body>
+</html>
