@@ -1,0 +1,35 @@
+<svg width="53" height="33" viewBox="0 0 53 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_i_578_4123)">
+<rect x="1" width="52" height="30" rx="15" fill="white" fill-opacity="0.1"/>
+<rect x="1.5" y="0.5" width="51" height="29" rx="14.5" stroke="white" stroke-opacity="0.22"/>
+<g filter="url(#filter1_d_578_4123)">
+<circle cx="16" cy="15" r="12" fill="url(#paint0_radial_578_4123)"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_i_578_4123" x="1" y="0" width="52" height="32" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="2"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0"/>
+<feBlend mode="normal" in2="shape" result="effect1_innerShadow_578_4123"/>
+</filter>
+<filter id="filter1_d_578_4123" x="0" y="1" width="32" height="32" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="2"/>
+<feGaussianBlur stdDeviation="2"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_578_4123"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_578_4123" result="shape"/>
+</filter>
+<radialGradient id="paint0_radial_578_4123" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(16 15) scale(12)">
+<stop stop-color="white"/>
+<stop offset="0.7" stop-color="#D4D9DF"/>
+<stop offset="1" stop-color="#8A929C"/>
+</radialGradient>
+</defs>
+</svg>
